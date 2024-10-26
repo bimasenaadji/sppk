@@ -3,5 +3,5 @@
 @section('title', 'index page')
 
 @section('content')
-    <h1>Halo seelamat datang {{ auth()->user()->name }}</h1>
+    <h1 class="mt-2">Master Customer</h1>
 @endsection

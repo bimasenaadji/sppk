@@ -51,7 +51,9 @@
             <div class="layout-page">
                 @include('layouts.navbar')
                 <div class="content-wrapper">
-                    @yield('content')
+                    <div class="container-fluid">
+                        @yield('content')
+                    </div>
                 </div>
                 @include('layouts.footer')
             </div>
