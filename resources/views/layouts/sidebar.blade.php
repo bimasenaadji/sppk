@@ -57,24 +57,55 @@
             </g>
           </svg>
         </span>
-        <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+        <span class="app-brand-text demo menu-text fw-bolder ms-2">Invoice</span>
       </a>
-  
+
       <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
         <i class="bx bx-chevron-left bx-sm align-middle"></i>
       </a>
     </div>
-  
+
     <div class="menu-inner-shadow"></div>
-  
+
     <ul class="menu-inner py-1">
-      <!-- Dashboard -->
-      <li class="menu-item active">
-        <a href="index.html" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-home-circle"></i>
-          <div data-i18n="Analytics">Dashboard</div>
-        </a>
-      </li>
-    </ul>
-  </aside>
-  
+        <li class="menu-item active">
+          <a href="#" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+            <div data-i18n="Analytics">Dashboard</div>
+          </a>
+        </li>
+
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <i class="menu-icon tf-icons bx bx-folder"></i>
+            <div data-i18n="Layouts">Data Master</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <div data-i18n="Without navbar">Customer</div>
+              </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                  <div data-i18n="Without navbar">Pengguna</div>
+                </a>
+              </li>
+          </ul>
+        </li>
+
+        <li class="menu-item">
+          <a href="#" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-cart"></i>
+            <div data-i18n="Analytics">Buat Invoice</div>
+          </a>
+        </li>
+
+        <li class="menu-item">
+          <a href="#" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-list-ul"></i>
+            <div data-i18n="Analytics">Daftar Invoice</div>
+          </a>
+        </li>
+      </ul>
+</aside>
