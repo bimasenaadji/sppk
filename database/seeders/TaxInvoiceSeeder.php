@@ -13,30 +13,15 @@ class TaxInvoiceSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('tax_invoices')->insert([
-            [
-                'id' => 1,
-                'invoice_id' => 1,
-                'tax_invoice_number' => 1001,
-                'ppn_amount' => 0.11,
-                'pph_amount' => 0,
-            ],
-            [
-                'id' => 2,
-                'invoice_id' => 2,
+        $invoices = DB::table('invoices')->get();
+
+        foreach ($invoices as $i) {
+            DB::table('tax_invoices')->insert([
+                'invoice_id' => $i->id,
                 'tax_invoice_number' => 1002,
                 'ppn_amount' => 0.11,
                 'pph_amount' => 0,
-            ],
-            [
-                'id' => 3,
-                'invoice_id' => 3,
-                'tax_invoice_number' => 1003,
-                'ppn_amount' => 0,
-                'pph_amount' => 0.11,
-            ]
-
-
-        ]);
+            ]);
+        }
     }
 }

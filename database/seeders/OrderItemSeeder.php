@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,31 +12,44 @@ class OrderItemSeeder extends Seeder
      */
     public function run(): void
     {
+
+        $orders = DB::table('orders')->pluck('id')->toArray();
+
+
+        $services = DB::table('services')->pluck('id')->toArray();
+
+
+        if (empty($orders) || empty($services)) {
+            echo "Data tidak ditemukan di tabel orders atau services.";
+            return;
+        }
+
+
         DB::table('order_items')->insert([
             [
-                'order_id' => 1,
-                'service_id' => 1,
+                'order_id' => $orders[0],
+                'service_id' => $services[0],
                 'qty' => 2,
                 'amount' => 100000.00,
-                'total_amount' => 200000.00,
+                'total_amount' => 2 * 100000.00,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'order_id' => 1,
-                'service_id' => 2,
+                'order_id' => $orders[0],
+                'service_id' => $services[1] ?? $services[0],
                 'qty' => 1,
                 'amount' => 150000.00,
-                'total_amount' => 150000.00,
+                'total_amount' => 1 * 150000.00,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'order_id' => 2,
-                'service_id' => 1,
+                'order_id' => $orders[1] ?? $orders[0],
+                'service_id' => $services[0],
                 'qty' => 3,
                 'amount' => 100000.00,
-                'total_amount' => 300000.00,
+                'total_amount' => 3 * 100000.00,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -13,28 +13,16 @@ class InvoiceSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('invoices')->insert([
-            [
-                'id' => 1,
-                'transaction_id' => 1,
+        $transactions = DB::table('transactions')->get();
+
+        foreach ($transactions as $t) {
+            DB::table('invoices')->insert([
+                'transaction_id' => $t->id,
                 'invoice_number' => 1001,
                 'invoice_date' => now(),
                 'due_date' => now(),
-            ],
-            [
-                'id' => 2,
-                'transaction_id' => 2,
-                'invoice_number' => 1002,
-                'invoice_date' => now(),
-                'due_date' => now(),
-            ],
-            [
-                'id' => 3,
-                'transaction_id' => 3,
-                'invoice_number' => 1003,
-                'invoice_date' => now(),
-                'due_date' => now(),
-            ],
-        ]);
+                'total_amount' => 2500000.00,
+            ]);
+        }
     }
 }

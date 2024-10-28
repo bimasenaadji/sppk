@@ -20,7 +20,7 @@ class CustomerSeeder extends Seeder
                 'email' => 'john.doe@example.com',
                 'no_telp' => '081234567890',
                 'alamat' => 'Jl. Mawar No. 1, Jakarta',
-                'tax_id' => 1,
+                'tax_id' => null,
             ],
             [
                 'id' => 2,
@@ -28,7 +28,7 @@ class CustomerSeeder extends Seeder
                 'email' => 'jane.smith@example.com',
                 'no_telp' => '082234567891',
                 'alamat' => 'Jl. Melati No. 2, Bandung',
-                'tax_id' => 2,
+                'tax_id' => null,
             ],
             [
                 'id' => 3,
@@ -36,9 +36,9 @@ class CustomerSeeder extends Seeder
                 'email' => 'michael.j@example.com',
                 'no_telp' => '083234567892',
                 'alamat' => 'Jl. Tunjungan No. 3, Surabaya',
-                'tax_id' => 3,
+                'tax_id' => null,
             ],
-            // Anda bisa menambahkan lebih banyak data di sini
+
         ]);
     }
 }
