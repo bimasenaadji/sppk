@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +25,25 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/change_pass', 'change_pass')->name('change_pass');
 });
 
+
+
+Route::controller(CustomerController::class)->group(function () {
+    Route::get('/customer', 'index')->name('customer.index');
+    Route::get('/customer/data', 'data')->name('customer.data');
+    Route::get('/customer/{customer}', 'edit')->name('customer.edit');
+    Route::delete('/customer/{customer}', 'destroy')->name('customer.destroy');
+    Route::post('/customer', 'store')->name('customer.store');
+    Route::put('/customer/{customer}', 'update')->name('customer.update');
+});
+
+Route::controller(UserController::class)->group(function () {
+    Route::get('/user', 'index')->name('user.index');
+    Route::get('/user/data', 'data')->name('user.data');
+    Route::get('/user/{user}', 'edit')->name('user.edit');
+    Route::delete('/user/{user}', 'destroy')->name('user.destroy');
+    Route::post('/user', 'store')->name('user.store');
+    Route::put('/user/{user}', 'update')->name('user.update');
+});
 
 
 

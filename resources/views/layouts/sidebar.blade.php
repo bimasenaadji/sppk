@@ -68,8 +68,8 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li class="menu-item active">
-          <a href="#" class="menu-link">
+        <li class="menu-item active {{ Request::is('' ? 'active' : '') }}">
+          <a href="{{ route('dashboard') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-home-circle"></i>
             <div data-i18n="Analytics">Dashboard</div>
           </a>
@@ -81,13 +81,13 @@
             <div data-i18n="Layouts">Data Master</div>
           </a>
           <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="#" class="menu-link">
+            <li class="menu-item {{ Request::is('customer') ? 'active' : '' }}">
+              <a href="{{ route('customer.index') }}" class="menu-link">
                 <div data-i18n="Without navbar">Customer</div>
               </a>
             </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
+            <li class="menu-item {{ Request::is('user') ? 'active' : '' }}">
+                <a href="{{ route('user.index') }}" class="menu-link">
                   <div data-i18n="Without navbar">Pengguna</div>
                 </a>
               </li>
