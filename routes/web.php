@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\TaxCategoryController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +45,18 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/user/{user}', 'destroy')->name('user.destroy');
     Route::post('/user', 'store')->name('user.store');
     Route::put('/user/{user}', 'update')->name('user.update');
+});
+
+
+Route::controller(TransactionController::class)->group(function () {
+    Route::get('/transaction', 'index')->name('transaction.index');
+    Route::get('/transaction-status', 'status')->name('transaction.status');
+    Route::get('/transaction/data', 'data')->name('transaction.data');
+});
+
+Route::controller(TaxCategoryController::class)->group(function () {
+    Route::get('/tax-category', 'index')->name('tax-category.index');
+    Route::get('/tax-category/data', 'data')->name('tax-category.data');
 });
 
 

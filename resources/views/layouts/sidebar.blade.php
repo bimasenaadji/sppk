@@ -95,10 +95,27 @@
         </li>
 
         <li class="menu-item">
-          <a href="#" class="menu-link">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-cart"></i>
-            <div data-i18n="Analytics">Buat Invoice</div>
+            <div data-i18n="Layouts">Transaksi</div>
           </a>
+          <ul class="menu-sub">
+            <li class="menu-item {{ Request::is('transaction') ? 'active' : '' }}">
+              <a href="{{ route('transaction.index') }}" class="menu-link">
+                <div data-i18n="Without navbar">Data Transaksi</div>
+              </a>
+            </li>
+            <li class="menu-item {{ Request::is('tax-category') ? 'active' : '' }}">
+                <a href="{{ route('tax-category.index') }}" class="menu-link">
+                  <div data-i18n="Without navbar">Kategori Pajak</div>
+                </a>
+              </li>
+            <li class="menu-item {{ Request::is('transaction-status') ? 'active' : '' }}">
+                <a href="{{ route('transaction.status') }}" class="menu-link">
+                  <div data-i18n="Without navbar">Status Transaksi</div>
+                </a>
+              </li>
+          </ul>
         </li>
 
         <li class="menu-item">
