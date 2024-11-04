@@ -68,14 +68,14 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li class="menu-item active {{ Request::is('' ? 'active' : '') }}">
-          <a href="{{ route('dashboard') }}" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-home-circle"></i>
-            <div data-i18n="Analytics">Dashboard</div>
-          </a>
-        </li>
+        <li class="menu-item {{ Request::is('/') ? 'active' : '' }}">
+            <a href="{{ route('dashboard') }}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ Request::is('customer') || Request::is('user') ? 'open active' : '' }}">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-folder"></i>
             <div data-i18n="Layouts">Data Master</div>
@@ -83,18 +83,18 @@
           <ul class="menu-sub">
             <li class="menu-item {{ Request::is('customer') ? 'active' : '' }}">
               <a href="{{ route('customer.index') }}" class="menu-link">
-                <div data-i18n="Without navbar">Customer</div>
+                <div data-i18n="Customer">Customer</div>
               </a>
             </li>
             <li class="menu-item {{ Request::is('user') ? 'active' : '' }}">
-                <a href="{{ route('user.index') }}" class="menu-link">
-                  <div data-i18n="Without navbar">Pengguna</div>
-                </a>
-              </li>
+              <a href="{{ route('user.index') }}" class="menu-link">
+                <div data-i18n="Pengguna">Pengguna</div>
+              </a>
+            </li>
           </ul>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ Request::is('transaction') || Request::is('tax-category') || Request::is('transaction-status') ? 'open active' : '' }}">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-cart"></i>
             <div data-i18n="Layouts">Transaksi</div>
@@ -102,26 +102,26 @@
           <ul class="menu-sub">
             <li class="menu-item {{ Request::is('transaction') ? 'active' : '' }}">
               <a href="{{ route('transaction.index') }}" class="menu-link">
-                <div data-i18n="Without navbar">Data Transaksi</div>
+                <div data-i18n="Data Transaksi">Data Transaksi</div>
               </a>
             </li>
             <li class="menu-item {{ Request::is('tax-category') ? 'active' : '' }}">
-                <a href="{{ route('tax-category.index') }}" class="menu-link">
-                  <div data-i18n="Without navbar">Kategori Pajak</div>
-                </a>
-              </li>
+              <a href="{{ route('tax-category.index') }}" class="menu-link">
+                <div data-i18n="Kategori Pajak">Kategori Pajak</div>
+              </a>
+            </li>
             <li class="menu-item {{ Request::is('transaction-status') ? 'active' : '' }}">
-                <a href="{{ route('transaction.status') }}" class="menu-link">
-                  <div data-i18n="Without navbar">Status Transaksi</div>
-                </a>
-              </li>
+              <a href="{{ route('transaction.status') }}" class="menu-link">
+                <div data-i18n="Status Transaksi">Status Transaksi</div>
+              </a>
+            </li>
           </ul>
         </li>
 
         <li class="menu-item">
           <a href="#" class="menu-link">
             <i class="menu-icon tf-icons bx bx-list-ul"></i>
-            <div data-i18n="Analytics">Daftar Invoice</div>
+            <div data-i18n="Daftar Invoice">Daftar Invoice</div>
           </a>
         </li>
       </ul>
