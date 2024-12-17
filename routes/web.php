@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TaxCategoryController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -47,11 +48,20 @@ Route::controller(UserController::class)->group(function () {
     Route::put('/user/{user}', 'update')->name('user.update');
 });
 
+Route::controller(OrderController::class)->group(function () {
+    Route::get('/order', 'index')->name('order.index');
+    Route::get('/order/data', 'data')->name('order.data');
+    Route::post('/order', 'store')->name('order.store');
+    Route::put('/order/{order}/success', 'successOrder')->name('order.success');
+    Route::get('/order/{order}/invoice', 'showInvoice')->name('order.invoice');
+});
+
 
 Route::controller(TransactionController::class)->group(function () {
     Route::get('/transaction', 'index')->name('transaction.index');
     Route::get('/transaction-status', 'status')->name('transaction.status');
     Route::get('/transaction/data', 'data')->name('transaction.data');
+    Route::get('/transaction/{transaction}/receipt', 'printReceipt')->name('transaction.receipt');
 });
 
 Route::controller(TaxCategoryController::class)->group(function () {

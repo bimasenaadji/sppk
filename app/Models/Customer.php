@@ -10,4 +10,9 @@ class Customer extends Model
 
     protected $fillable = ['name', 'email', 'no_telp', 'alamat', 'tax_id'];
     use HasFactory;
+
+    public function taxCategory()
+    {
+        return $this->belongsTo(TaxCategory::class, 'tax_id');
+    }
 }

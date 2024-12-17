@@ -27,9 +27,13 @@ class TransactionController extends Controller
                 return $row->customer ? $row->customer->name : '-';
             })
             ->addColumn('transaction_type', function ($row) {
-                // Tampilkan transaction_type dari taxCategory atau '-' jika tidak ada data
                 return $row->taxCategory ? $row->taxCategory->transaction_type : '-';
             })
             ->make(true);
+    }
+    public function printReceipt($transactionId)
+    {
+        $transaction = Transaction::with('order')->findOrFail($transactionId);
+        return view('transactions.receipt', compact('transaction'));
     }
 }

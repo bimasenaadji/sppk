@@ -3,16 +3,14 @@
 @section('title', 'index page')
 
 @section('content')
-    <h1 class="mt-2 mb-4">Kategori Pajak</h1>
+    <h1 class="mt-2 mb-4">Data Transaksi</h1>
 
-    <!-- Add User Button -->
     <div class="mb-3">
         <button type="button" class="btn btn-primary" id="btn-add-transaction" data-bs-toggle="modal" data-bs-target="#modalCreate">
-            Tambah Kategori Pajak
+            Tambah Data Transaksi
         </button>
     </div>
 
-    <!-- User Table -->
     <table class="table table-bordered" id="transactionTable">
         <thead>
             <tr>
@@ -129,6 +127,7 @@
                         return `<span class="flex gap-x-5">
                             <button type="button" data-id="${row.id}" class="text-white btn btn-primary btn-edit-data" data-bs-toggle="modal" data-bs-target="#modalEdit" >Edit</button>
                             <button type="button" data-id="${row.id}" class="text-white btn btn-danger btn-delete-data">Hapus</button>
+                            <button type="button" data-id="${row.id}" class="text-white btn btn-info btn-invoice-data">Cetak</button>
                         </span>`;
                     }}
                 ]
@@ -149,7 +148,7 @@
                 url: `/user/${userId}`,
                 type: 'GET',
                 success: function(data) {
-                    // Tampilkan data di modal
+
                     $('#modalEdit #userId').val(data.id);
                     $('#modalEdit #nameWithTitle').val(data.name);
                     $('#modalEdit #emailWithTitle').val(data.email);

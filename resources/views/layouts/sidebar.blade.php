@@ -93,13 +93,17 @@
             </li>
           </ul>
         </li>
-
-        <li class="menu-item {{ Request::is('transaction') || Request::is('tax-category') || Request::is('transaction-status') ? 'open active' : '' }}">
+        <li class="menu-item {{ Request::is('transaction') || Request::is('order') || Request::is('tax-category') || Request::is('transaction-status') ? 'open active' : '' }}">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-cart"></i>
-            <div data-i18n="Layouts">Transaksi</div>
+            <div data-i18n="Layouts">Order dan Transaksi</div>
           </a>
           <ul class="menu-sub">
+            <li class="menu-item {{ Request::is('order') ? 'active' : '' }}">
+              <a href="{{ route('order.index') }}" class="menu-link">
+                <div data-i18n="Data Transaksi">Data Order</div>
+              </a>
+            </li>
             <li class="menu-item {{ Request::is('transaction') ? 'active' : '' }}">
               <a href="{{ route('transaction.index') }}" class="menu-link">
                 <div data-i18n="Data Transaksi">Data Transaksi</div>
@@ -108,11 +112,6 @@
             <li class="menu-item {{ Request::is('tax-category') ? 'active' : '' }}">
               <a href="{{ route('tax-category.index') }}" class="menu-link">
                 <div data-i18n="Kategori Pajak">Kategori Pajak</div>
-              </a>
-            </li>
-            <li class="menu-item {{ Request::is('transaction-status') ? 'active' : '' }}">
-              <a href="{{ route('transaction.status') }}" class="menu-link">
-                <div data-i18n="Status Transaksi">Status Transaksi</div>
               </a>
             </li>
           </ul>

@@ -19,4 +19,8 @@ class Transaction extends Model
     {
         return $this->belongsTo(TaxCategory::class, 'tax_categories_id');
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }
