@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'index page')
+@section('title', 'Transaction Page')
 
 @section('content')
     <h1 class="mt-2 mb-4">Data Transaksi</h1>
@@ -14,7 +14,6 @@
     <table class="table table-bordered" id="transactionTable">
         <thead>
             <tr>
-                <th></th>
                 <th>No</th>
                 <th>Customer</th>
                 <th>Tax Category</th>
@@ -25,35 +24,32 @@
         <tbody></tbody>
     </table>
 
-    <!-- Modal -->
+    <!-- Modal Create Transaction -->
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalCenterTitle">Tambah Kategori Pajak</h5>
+                    <h5 class="modal-title">Tambah Transaksi</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="transactionForm" action="{{ route('user.store') }}" method="POST">
+                <form id="transactionForm" action="{{ route('transaction.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <input type="hidden" id="userId" name="id">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter Name" required>
-                            </div>
+                        <div class="mb-3">
+                            <label for="customer_id" class="form-label">Customer</label>
+                            <select id="customer_id" name="customer_id" class="form-control" required>
+                                <!-- Populasi data customer dari controller -->
+                            </select>
                         </div>
-                        <div class="row g-2">
-                            <div class="col mb-0">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="xxxx@xxx.xx" required>
-                            </div>
+                        <div class="mb-3">
+                            <label for="tax_categories_id" class="form-label">Tax Category</label>
+                            <select id="tax_categories_id" name="tax_categories_id" class="form-control" required>
+                                <!-- Populasi data tax category dari controller -->
+                            </select>
                         </div>
-                        <div class="row g-2">
-                            <div class="col mb-0">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="********" required>
-                            </div>
+                        <div class="mb-3">
+                            <label for="total_amount" class="form-label">Total</label>
+                            <input type="number" id="total_amount" name="total_amount" class="form-control" placeholder="Enter total amount" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -64,136 +60,67 @@
             </div>
         </div>
     </div>
-    {{-- End Modal Create  --}}
-
-     <!-- Modal Edit -->
-     <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="transactionFormEdit" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="modal-body">
-                        <input type="hidden" id="userId" name="id">
-                        <div class="mb-3">
-                            <label for="nameWithTitle" class="form-label">Name</label>
-                            <input type="text" id="nameWithTitle" name="name" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="emailWithTitle" class="form-label">Email</label>
-                            <input type="email" id="emailWithTitle" name="email" class="form-control" required>
-                        </div>
-                        <div class="row g-2">
-                            <div class="col mb-0">
-                                <label for="passwordWithTitle" class="form-label">Password</label>
-                                <input type="password" id="passwordWithTitle" name="passwordWithTitle" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    {{-- End Modal Create --}}
 @endsection
 
 @push('js')
     <script>
-        $(document).ready(function() {
-            // Datatable initialization
+        $(document).ready(function () {
+            // Initialize DataTable
             $('#transactionTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: ' {{ route('transaction.data') }}',
+                    url: '{{ route('transaction.data') }}',
                     type: 'GET',
                 },
                 columns: [
-                    { data: null, orderable: false, className: 'text-center', render: function (data, type, row) {
-                        return `<input type="checkbox" name="id[]" value="${data.id}" class="form-check-input">`;
-                    }},
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'customer_name', name: 'customer_name' },
-                    { data: 'transaction_type', name: 'transaction_type', className: 'px-6 py-4 border-b border-gray-200 whitespace-normal break-words' },
-                    { data: 'total_amount', name: 'total_amount' },
-                    { data: null, className: 'px-6 py-4 border-b border-gray-200 whitespace-normal break-words', render: function (data, type, row) {
-                        return `<span class="flex gap-x-5">
-                            <button type="button" data-id="${row.id}" class="text-white btn btn-primary btn-edit-data" data-bs-toggle="modal" data-bs-target="#modalEdit" >Edit</button>
-                            <button type="button" data-id="${row.id}" class="text-white btn btn-danger btn-delete-data">Hapus</button>
-                            <button type="button" data-id="${row.id}" class="text-white btn btn-info btn-invoice-data">Cetak</button>
-                        </span>`;
-                    }}
+                    { data: 'tax_category_name', name: 'tax_category_name' },
+                    { data: 'total_amount', name: 'total_amount', render: $.fn.dataTable.render.number(',', '.', 2, 'Rp ') },
+                    { 
+                        data: null, 
+                        orderable: false, 
+                        searchable: false, 
+                        render: function (data, type, row) {
+                            return `
+                                <button class="btn btn-success btn-sm" onclick="printInvoice(${row.id})">Print Invoice</button>
+                                <button class="btn btn-danger btn-sm btn-delete" data-id="${row.id}">Delete</button>
+                            `;
+                        }
+                    }
                 ]
             });
 
-            // Open modal for Add User
-            $('#btn-add-transaction').click(function() {
-                $('#modalCenterTitle').text('Tambah User');
+            // Add Transaction Modal Logic
+            $('#btn-add-transaction').click(function () {
                 $('#transactionForm')[0].reset();
-                $('#userId').val('');
+                $('#transactionForm').attr('action', '{{ route('transaction.store') }}');
             });
 
-            // Open modal for Edit User
-            $(document).on('click', '.btn-edit-data', function() {
-            const userId = $(this).data('id');
-            
-            $.ajax({
-                url: `/user/${userId}`,
-                type: 'GET',
-                success: function(data) {
-
-                    $('#modalEdit #userId').val(data.id);
-                    $('#modalEdit #nameWithTitle').val(data.name);
-                    $('#modalEdit #emailWithTitle').val(data.email);
-
-                    $('#transactionFormEdit').attr('action', `/user/${userId}`);
-
-                    $('#modalEdit').modal('show');
-
-                }
-            });
-        });
-
-            // Form submission for Add/Edit
-            $('#transactionForm').submit(function(e) {
-                e.preventDefault();
-                const formData = $(this).serialize();
-                const userId = $('#userId').val();
-                const url = userId ? `/user/${userId}` : '{{ route('user.store') }}';
-                const method = userId ? 'PUT' : 'POST';
-
-                $.ajax({
-                    url: url,
-                    type: method,
-                    data: formData,
-                    success: function(response) {
-                        $('#modalCenter').modal('hide');
-                        $('#transactionTable').DataTable().ajax.reload();
-                    }
-                });
-            });
-
-            // Delete User
-            $(document).on('click', '.btn-delete-data', function() {
-                const userId = $(this).data('id');
-                if (confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+            // Delete Transaction
+            $(document).on('click', '.btn-delete', function () {
+                const id = $(this).data('id');
+                if (confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) {
                     $.ajax({
-                        url: `/user/${userId}`,
+                        url: `/transaction/${id}`,
                         type: 'DELETE',
                         data: { _token: '{{ csrf_token() }}' },
-                        success: function(response) {
+                        success: function () {
                             $('#transactionTable').DataTable().ajax.reload();
+                        },
+                        error: function () {
+                            alert('Gagal menghapus transaksi.');
                         }
                     });
                 }
             });
+
+            // View Transaction Function
+            window.printInvoice = function (id) {
+                window.open(`/transaction/${id}/invoice`, '_blank'); // Membuka invoice di tab baru
+            };
         });
     </script>
 @endpush

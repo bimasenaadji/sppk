@@ -10,7 +10,8 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        return view('master-customer.index');
+        $totalCustomers = Customer::count();
+        return view('master-customer.index', compact('totalCustomers'));
     }
 
     public function data()

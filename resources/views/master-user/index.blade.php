@@ -5,14 +5,12 @@
 @section('content')
     <h1 class="mt-2 mb-4">Master User</h1>
 
-    <!-- Add User Button -->
     <div class="mb-3">
         <button type="button" class="btn btn-primary" id="btn-add-user" data-bs-toggle="modal" data-bs-target="#modalCreate">
             Tambah User
         </button>
     </div>
 
-    <!-- User Table -->
     <table class="table table-bordered" id="userTable">
         <thead>
             <tr>
@@ -25,7 +23,6 @@
         </thead>
     </table>
 
-    <!-- Modal -->
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -107,7 +104,6 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            // Datatable initialization
             $('#userTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -128,18 +124,15 @@
                 ]
             });
 
-            // Open modal for Add User
             $('#btn-add-user').click(function() {
                 $('#modalCenterTitle').text('Tambah User');
                 $('#userForm')[0].reset();
                 $('#userId').val('');
             });
 
-            // Open modal for Edit User
             $(document).on('click', '.btn-edit-data', function() {
             const userId = $(this).data('id');
             
-            // Ambil data user dengan AJAX
             $.ajax({
                 url: `/user/${userId}`,
                 type: 'GET',
@@ -157,7 +150,6 @@
             });
         });
 
-            // Form submission for Add/Edit
             $('#userForm').submit(function(e) {
                 e.preventDefault();
                 const formData = $(this).serialize();
@@ -176,7 +168,6 @@
                 });
             });
 
-            // Delete User
             $(document).on('click', '.btn-delete-data', function() {
                 const userId = $(this).data('id');
                 if (confirm('Apakah Anda yakin ingin menghapus user ini?')) {

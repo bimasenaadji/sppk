@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    protected $fillable = [''];
+    protected $fillable = [
+        'transaction_id',
+        'customer_id',
+        'tax_categories_id',
+        'total_amount',
+        'ppn_amount',
+        'pph_amount',
+        'net_amount',
+    ];
     use HasFactory;
 
     public function customer()
@@ -22,5 +30,13 @@ class Transaction extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
+    }
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
     }
 }
