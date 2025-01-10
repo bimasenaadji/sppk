@@ -30,6 +30,14 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'logo' => env('APP_LOGO', ''),
+    'name' => env('APP_NAME', 'Default Name'),
+    'address' => env('APP_ADDRESS', 'Default Address'),
+    'website' => env('APP_WEBSITE', 'https://default-website.com'),
+    'phone' => env('APP_PHONE', '000000000'),
+    'npwp' => env('APP_NPWP', '0000000000000'),
+    'bank_account' => env('APP_BANK_ACCOUNT', 'Default Name'),
+
 
     /*
     |--------------------------------------------------------------------------

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     protected $fillable = [
+        'order_id',
         'transaction_id',
         'customer_id',
         'tax_categories_id',
@@ -33,7 +34,7 @@ class Transaction extends Model
     }
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class, 'order_id');
+        return $this->hasManyThrough(OrderItem::class, Order::class, 'id', 'order_id', 'order_id', 'id');
     }
     public function invoice()
     {

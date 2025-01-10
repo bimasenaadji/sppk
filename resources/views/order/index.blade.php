@@ -129,6 +129,31 @@
                 ]
             });
         });
+        $(document).on('click', '.btn-delete-data', function () {
+            const id = $(this).data('id');
+
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                $.ajax({
+                    url: `{{ url('/order') }}/${id}/delete`,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}' 
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $('#orderTable').DataTable().ajax.reload(); 
+                        } else {
+                            alert('Gagal menghapus data. Silakan coba lagi.');
+                        }
+                    },
+                    error: function () {
+                        alert('Terjadi kesalahan saat menghapus data.');
+                    }
+                });
+            }
+        });
+
 
         function addOrderItem() {
             const index = $('#orderItemsContainer .order-item').length;

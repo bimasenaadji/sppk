@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "opcodesio/log-viewer": "^3.12",
+        "riskihajar/terbilang": "^2.0",
         "yajra/laravel-datatables": "10.0"
     },
     "require-dev": {

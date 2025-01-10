@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TaxCategoryController;
 use App\Http\Controllers\TransactionController;
@@ -60,8 +61,16 @@ Route::prefix('order')->controller(OrderController::class)->group(function () {
     Route::post('/{id}/cancel', 'cancel')->name('order.cancel');
     Route::get('/{order}/invoice', 'showInvoice')->name('order.invoice');
     Route::get('/{order}/print', 'printInvoice')->name('order.print');
+    Route::delete('/{id}/delete', 'destroy')->name('order.delete');
 });
 
+Route::prefix('invoice')->controller(InvoiceController::class)->group(function () {
+    Route::get('/',  'index')->name('invoice.index');
+    Route::get('/data', 'data')->name('invoice.data');
+    Route::delete('/{id}', 'destroy')->name('invoices.destroy');
+    Route::put('/{id}/update-status',  'updateStatus')->name('invoices.updateStatus');
+    Route::get('/{id}/print-receipt',  'printReceipt')->name('invoices.printReceipt');
+});
 
 
 

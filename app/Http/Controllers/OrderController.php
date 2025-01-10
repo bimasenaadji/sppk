@@ -117,14 +117,19 @@ class OrderController extends Controller
 
     public function destroy($id)
     {
-        $order = Order::findOrFail($id);
+        try {
+            $order = Order::findOrFail($id);
 
-        $order->orderItems()->delete();
+            $order->orderItems()->delete();
 
-        $order->delete();
+            $order->delete();
 
-        return redirect()->route('order.index')->with('success', 'Order deleted successfully!');
+            return response()->json(['success' => true, 'message' => 'Order deleted successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to delete order.']);
+        }
     }
+
     public function cancel(Request $request, $id)
     {
         try {

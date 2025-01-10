@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\Service;
 use App\Models\TaxInvoice;
 use App\Models\Transaction;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -14,7 +16,10 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        return view('transaction.index');
+
+        $transactions = Transaction::with(['orderItems.service'])->get(); // Mengambil semua transaksi beserta item order dan layanan terkait
+
+        return view('transaction.index', compact('transactions'));
     }
     public function status()
     {
@@ -33,71 +38,49 @@ class TransactionController extends Controller
     }
     public function showInvoice($id)
     {
-        // Ambil data transaksi berdasarkan ID dengan relasi terkait
         $transaction = Transaction::with(['customer', 'taxCategory', 'orderItems.service'])->findOrFail($id);
 
-        // Generate nomor invoice
-        $invoiceNumber = 'INV-' . now()->format('Ymd') . '-' . $transaction->id;
+        $invoice = Invoice::where('transaction_id', $transaction->id)->first();
 
-        // Tanggal invoice dan due date
-        $invoiceDate = now();
-        $dueDate = now()->addDays(7);
+        if ($invoice) {
+            $taxInvoice = TaxInvoice::updateOrCreate(
+                ['invoice_id' => $invoice->id],
+                [
+                    'tax_invoice_number' => 'TAX-' . $invoice->invoice_number,
+                    'ppn_amount' => $invoice->total_amount * ($transaction->taxCategory->tax_ppn / 100),
+                    'pph_amount' => $invoice->total_amount * ($transaction->taxCategory->tax_pph / 100),
+                ]
+            );
 
-        // Hitung total_amount jika null
-        $totalAmount = $transaction->total_amount;
+            $pdf = Pdf::loadView('transaction.print-invoice', compact('transaction', 'invoice', 'taxInvoice'));
 
-        if (is_null($totalAmount)) {
-            // Jika total_amount tidak tersedia, hitung dari orderItems
-            $totalAmount = $transaction->orderItems->sum(function ($item) {
-                return $item->amount * $item->qty;
-            });
+            return $pdf->download('invoice-' . $invoice->invoice_number . '.pdf');
         }
 
-        if (is_null($totalAmount)) {
-            // Jika masih null, tampilkan pesan debugging
-            dd('Total amount is null', $transaction);
-        }
+        $totalAmount = $transaction->orderItems->sum(function ($item) {
+            return $item->amount * $item->qty;
+        });
 
-        // Data untuk tabel Invoice
         $invoiceData = [
             'transaction_id' => $transaction->id,
-            'invoice_number' => $invoiceNumber,
-            'invoice_date' => $invoiceDate,
-            'due_date' => $dueDate,
+            'invoice_number' => 'INV-' . now()->format('Ymd') . '-' . $transaction->id,
+            'invoice_date' => now(),
+            'due_date' => now()->addDays(7),
             'total_amount' => $totalAmount,
             'status' => 'belum_dibayar',
-            'created_at' => now(),
-            'updated_at' => now(),
         ];
 
-        // Simpan data invoice ke database
         $invoice = Invoice::create($invoiceData);
 
-        // Hitung pajak berdasarkan kategori pajak
-        $taxCategory = $transaction->taxCategory;
-        $ppnRate = $taxCategory->tax_ppn ?? 0;
-        $pphRate = $taxCategory->tax_pph ?? 0;
-
-        $ppnAmount = $totalAmount * ($ppnRate / 100);
-        $pphAmount = $totalAmount * ($pphRate / 100);
-
-        // Data untuk tabel Tax Invoice
-        $taxInvoiceData = [
+        $taxInvoice = TaxInvoice::create([
             'invoice_id' => $invoice->id,
-            'tax_invoice_number' => 'TAX-' . $invoiceNumber,
-            'ppn_amount' => $ppnAmount,
-            'pph_amount' => $pphAmount,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
+            'tax_invoice_number' => 'TAX-' . $invoice->invoice_number,
+            'ppn_amount' => $totalAmount * ($transaction->taxCategory->tax_ppn / 100),
+            'pph_amount' => $totalAmount * ($transaction->taxCategory->tax_pph / 100),
+        ]);
 
-        // Simpan data tax invoice ke database
-        $taxInvoice = TaxInvoice::create($taxInvoiceData);
+        $pdf = Pdf::loadView('transaction.print-invoice', compact('transaction', 'invoice', 'taxInvoice'));
 
-        // Generate PDF menggunakan view yang sesuai
-        $pdf = Pdf::loadView('transactions.invoice', compact('transaction', 'invoice', 'taxInvoice'));
-
-        // Unduh file PDF
         return $pdf->download('invoice-' . $invoice->invoice_number . '.pdf');
     }
 }
