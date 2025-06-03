@@ -1,24 +1,21 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function index()
     {
-
         return view('master-user.index');
     }
 
-    // Controller function
     public function data()
     {
-        $data = User::all();
+        $data = User::select(['id', 'name', 'email', 'position', 'phone']);
         return DataTables::of($data)
             ->addIndexColumn()
             ->make(true);
@@ -29,54 +26,55 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         return response()->json($user);
     }
-    // Store user baru di DB
+
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|',
+            'position' => 'required|string|max:100',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:6',
         ]);
 
-        // Create new user
-        $user = User::create([
+        User::create([
             'name' => $request->name,
+            'position' => $request->position,
+            'phone' => $request->phone,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('user.index')->with('success', 'User berhasil dibuat.');
+        return response()->json(['success' => true]);
     }
-    // Show form edit user
 
-    // Update user
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
+        $user = User::findOrFail($id);
+        
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|',
-
+            'position' => 'required|string|max:100',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
         ]);
 
-        // Update user detail
-        $user->name = $request->name;
-        $user->email = $request->email;
+        $data = $request->only(['name', 'email', 'position', 'phone']);
 
-
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
         }
 
-        $user->save();
+        $user->update($data);
 
-        return redirect()->route('user.index')->with('success', 'User berhasil diubah.');
+        return response()->json(['success' => true]);
     }
 
-    // Delete user from DB
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+
+        return response()->json(['success' => true]);
     }
 }

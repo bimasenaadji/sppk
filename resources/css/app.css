@@ -1,0 +1,16 @@
+/* custom.css */
+
+.btn-success-dark {
+    background-color: #0d822f;
+    border-color: #0d822f;
+    color: #fff;
+}
+.btn-success-dark:hover {
+    background-color: #145a24;
+    border-color: #145a24;
+    color: #fff;
+}
+/* Beri jarak antar tombol aksi */
+.btn-action + .btn-action {
+    margin-left: 0.5rem;
+}

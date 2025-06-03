@@ -47,7 +47,7 @@
                           </div>
                           <div class="flex-grow-1">
                             <span class="fw-semibold d-block">{{ auth()->user()->name }}</span>
-                            <small class="text-muted">Disty Invoice</small>
+                            <small class="text-muted">HSE</small>
                           </div>
                         </div>
                       </a>

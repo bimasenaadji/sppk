@@ -6,7 +6,7 @@
     <h1 class="mt-2 mb-4">Master User</h1>
 
     <div class="mb-3">
-        <button type="button" class="btn btn-primary" id="btn-add-user" data-bs-toggle="modal" data-bs-target="#modalCreate">
+        <button type="button" class="btn btn-success-dark" id="btn-add-user" data-bs-toggle="modal" data-bs-target="#modalCreate">
             Tambah User
         </button>
     </div>
@@ -14,11 +14,11 @@
     <table class="table table-bordered" id="userTable">
         <thead>
             <tr>
-                <th></th>
-                <th>No</th>
                 <th>Nama</th>
-                <th>Email</th>
-                <th>Aksi</th>
+                    <th>Posisi</th>
+                    <th>Nomor Telepon</th>
+                    <th>Email</th>
+                    <th>Aksi</th>
             </tr>
         </thead>
     </table>
@@ -34,10 +34,18 @@
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" id="userId" name="id">
-                        <div class="row">
+                        <div class="col mb-3">
                             <div class="col mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter Name" required>
+                                <label for="nameWithTitle" class="form-label">Name</label>
+                                <input type="text" id="nameWithTitle" name="name" class="form-control" placeholder="Enter Name" required>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="positionWithTitle " class="form-label">Position</label>
+                                <input type="text" id="positionWithTitle " name="position" class="form-control" placeholder="Enter Name" required>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="phoneWithTitle" class="form-label">Phone</label>
+                                <input type="text" id="phoneWithTitle" name="phone" class="form-control" placeholder="Enter Name" required>
                             </div>
                         </div>
                         <div class="row g-2">
@@ -81,6 +89,18 @@
                             <input type="text" id="nameWithTitle" name="name" class="form-control" required>
                         </div>
                         <div class="mb-3">
+                            <label for="positionWithTitle" class="form-label">Position</label>
+                            <input type="text" id="positionWithTitle" name="position" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneWithTitle" class="form-label">Phone</label>
+                            <input type="text" id="phoneWithTitle" name="phone" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <div class="mb-3">
+                                <label for="nameWithTitle" class="form-label">Name</label>
+                                <input type="text" id="nameWithTitle" name="name" class="form-control" required>
+                            </div>
                             <label for="emailWithTitle" class="form-label">Email</label>
                             <input type="email" id="emailWithTitle" name="email" class="form-control" required>
                         </div>
@@ -109,19 +129,18 @@
                 serverSide: true,
                 ajax: '{{ route('user.data') }}',
                 columns: [
-                    { data: null, orderable: false, className: 'text-center', render: function (data, type, row) {
-                        return `<input type="checkbox" name="id[]" value="${data.id}" class="form-check-input">`;
-                    }},
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'name', name: 'name', className: 'px-6 py-4 border-b border-gray-200 whitespace-normal break-words' },
-                    { data: 'email', name: 'email' },
-                    { data: null, className: 'px-6 py-4 border-b border-gray-200 whitespace-normal break-words', render: function (data, type, row) {
-                        return `<span class="flex gap-x-5">
-                            <button type="button" data-id="${row.id}" class="text-white btn btn-primary btn-edit-data" data-bs-toggle="modal" data-bs-target="#modalEdit" >Edit</button>
-                            <button type="button" data-id="${row.id}" class="text-white btn btn-danger btn-delete-data">Hapus</button>
-                        </span>`;
-                    }}
-                ]
+    { data: 'name', name: 'name' },
+    { data: 'position', name: 'position' },
+    { data: 'phone', name: 'phone' },
+    { data: 'email', name: 'email' },
+    { data: null, render: function (data, type, row) {
+        return `
+            <button type="button" data-id="${row.id}" class="btn btn-sm btn-primary btn-edit-data" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit</button>
+            <button type="button" data-id="${row.id}" class="btn btn-sm btn-danger btn-delete-data">Hapus</button>
+        `;
+    }}
+]
+
             });
 
             $('#btn-add-user').click(function() {
@@ -137,36 +156,39 @@
                 url: `/user/${userId}`,
                 type: 'GET',
                 success: function(data) {
-                    // Tampilkan data di modal
-                    $('#modalEdit #userId').val(data.id);
-                    $('#modalEdit #nameWithTitle').val(data.name);
-                    $('#modalEdit #emailWithTitle').val(data.email);
+    $('#modalEdit #userId').val(data.id);
+    $('#modalEdit #nameWithTitle').val(data.name);
+    $('#modalEdit #emailWithTitle').val(data.email);
+    $('#modalEdit #positionWithTitle').val(data.position);
+    $('#modalEdit #phoneWithTitle').val(data.phone);
+    $('#userFormEdit').attr('action', `/user/${data.id}`);
+}
 
-                    $('#userFormEdit').attr('action', `/user/${userId}`);
-
-                    $('#modalEdit').modal('show');
-
-                }
             });
         });
+$('#userForm').submit(function(e) {
+    e.preventDefault();
+    const formData = $(this).serialize();
+    const userId = $('#userId').val();
+    const url = userId ? `/user/${userId}` : '{{ route('user.store') }}';
+    const method = userId ? 'PUT' : 'POST';
 
-            $('#userForm').submit(function(e) {
-                e.preventDefault();
-                const formData = $(this).serialize();
-                const userId = $('#userId').val();
-                const url = userId ? `/user/${userId}` : '{{ route('user.store') }}';
-                const method = userId ? 'PUT' : 'POST';
+    $.ajax({
+        url: url,
+        type: method,
+        data: formData,
+        success: function(response) {
+            // Tampilkan alert jika ingin
+            alert(response.message || 'Data berhasil disimpan.');
+            // Lalu refresh seluruh halaman
+            location.reload();
+        },
+        error: function() {
+            alert('Terjadi kesalahan saat menyimpan data.');
+        }
+    });
+});
 
-                $.ajax({
-                    url: url,
-                    type: method,
-                    data: formData,
-                    success: function(response) {
-                        $('#modalCenter').modal('hide');
-                        $('#userTable').DataTable().ajax.reload();
-                    }
-                });
-            });
 
             $(document).on('click', '.btn-delete-data', function() {
                 const userId = $(this).data('id');

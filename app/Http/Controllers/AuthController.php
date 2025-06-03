@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->route('report.index'); // Redirect ke /report
         }
         return back()->withErrors([
             'email' => 'Email atau password salah.',
@@ -98,4 +99,26 @@ class AuthController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+    public function showRegisterForm()
+{
+    return view('auth.register'); // Sesuaikan dengan nama file blade-mu
+}
+
+public function register(Request $request)
+{
+    $request->validate([
+        'username' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:6',
+    ]);
+
+    User::create([
+        'name' => $request->username,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+    ]);
+
+    return redirect()->route('loginForm')->with('success', 'Register berhasil. Silakan login.');
+}
 }

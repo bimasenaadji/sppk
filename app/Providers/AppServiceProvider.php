@@ -23,18 +23,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('index', function ($view) {
-            $totalCustomers = Customer::count();
-            $view->with('totalCustomers', $totalCustomers);
-        });
+        // View::composer('index', function ($view) {
+        //     $totalCustomers = Customer::count();
+        //     $view->with('totalCustomers', $totalCustomers);
+        // });
 
-        View::composer('index', function ($view) {
-            $totalOrders = Order::count();
-            $view->with('totalOrders', $totalOrders);
-        });
-        View::composer('index', function ($view) {
-            $totalTransactions = Transaction::count();
-            $view->with('totalTransactions', $totalTransactions);
-        });
+        // View::composer('index', function ($view) {
+        //     $totalOrders = Order::count();
+        //     $view->with('totalOrders', $totalOrders);
+        // });
+        // View::composer('index', function ($view) {
+        //     $totalTransactions = Transaction::count();
+        //     $view->with('totalTransactions', $totalTransactions);
+        // });
     }
 }

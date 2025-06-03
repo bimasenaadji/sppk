@@ -19,6 +19,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'position',
+        'phone',
         'email',
         'password',
     ];
@@ -33,6 +35,22 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function index()
+    {
+        $users = User::all(); // Ambil semua user
+        return view('report.index', compact('users'));
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'reporter_id');
+    }
+
+   public function images()
+   {
+       return $this->hasMany(Image::class, 'uploaded_by');
+   }
+
     /**
      * The attributes that should be cast.
      *
@@ -42,4 +60,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
 }

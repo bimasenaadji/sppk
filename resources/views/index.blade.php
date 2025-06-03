@@ -13,7 +13,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Customer
+                                Total Laporan
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{ number_format($totalCustomers, 0, '.', ',') }}
@@ -34,7 +34,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Total Order</div>
+                                Total Kejadian</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{ number_format($totalOrders, 0, '.', ',') }}
                             </div>
@@ -54,7 +54,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Total Transaksi</div>
+                                Total Insiden</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{ number_format($totalTransactions, 0, '.', ',') }}
                             </div>

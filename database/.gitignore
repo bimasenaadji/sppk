@@ -1,1 +1,3 @@
 *.sqlite*
+nodemodules/
+.env
