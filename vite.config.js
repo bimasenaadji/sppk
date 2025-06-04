@@ -2,11 +2,17 @@ import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 
 export default defineConfig({
-    base: "/build/", // INI WAJIB agar Vite tahu path asset di public
     plugins: [
         laravel({
             input: ["resources/css/app.css", "resources/js/app.js"],
             refresh: true,
         }),
     ],
+    build: {
+        manifest: true,
+        outDir: "public/build",
+        rollupOptions: {
+            input: ["resources/css/app.css", "resources/js/app.js"],
+        },
+    },
 });
